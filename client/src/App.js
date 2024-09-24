@@ -128,10 +128,17 @@ const App = () => {
     );
   }
 
+  // console.log("User: ",user?.photoURL)
   return (
     <div className="App flex flex-col items-center justify-center min-h-screen">
+      <div className="user-profile flex flex-col items-center mb-4">
+        {user.photoURL && <img src={user.photoURL} alt="User Profile" className="profile-pic" />}
+        <p className="user-name">{user.displayName}</p>
+        <button onClick={logOut} className="btn">Log Out</button>
+      </div>
+  
       {loading ? (
-        <div>Loading...</div> // Replace with LoadingScreen component if desired
+        <div>Loading...</div>
       ) : (
         <div className="input-container flex flex-col items-center">
           <img src={logo} alt="Logo" className="logo" />
@@ -151,5 +158,5 @@ const App = () => {
       )}
     </div>
   );
-};
+}  
 export default App;
