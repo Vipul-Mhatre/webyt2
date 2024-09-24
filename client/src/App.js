@@ -130,8 +130,8 @@ const App = () => {
 
   // console.log("User: ",user?.photoURL)
   return (
-    <div className="App flex flex-col items-center justify-center min-h-screen">
-      <div className="user-profile flex flex-col items-center mb-4">
+    <div className="App">
+      <div className="user-profile">
         {user.photoURL && <img src={user.photoURL} alt="User Profile" className="profile-pic" />}
         <p className="user-name">{user.displayName}</p>
         <button onClick={logOut} className="btn">Log Out</button>
@@ -140,9 +140,9 @@ const App = () => {
       {loading ? (
         <div>Loading...</div>
       ) : (
-        <div className="input-container flex flex-col items-center">
+        <div className="input-container">
           <img src={logo} alt="Logo" className="logo" />
-          <form onSubmit={handleSubmit} className="flex flex-col items-center">
+          <form onSubmit={handleSubmit} className="form">
             <input
               type="text"
               placeholder="Enter YouTube Channel ID"
@@ -156,7 +156,95 @@ const App = () => {
           {channelId && <Channel channelId={channelId} />}
         </div>
       )}
+      
+      <style>
+        {`
+          .App {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            position: relative;
+          }
+  
+          .user-profile {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            align-items: center;
+          }
+  
+          .profile-pic {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 10px;
+          }
+  
+          .user-name {
+            font-size: 16px;
+            font-weight: bold;
+            margin-right: 10px;
+          }
+  
+          .btn {
+            padding: 5px 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+          }
+  
+          .btn:hover {
+            background-color: #0056b3;
+          }
+  
+          .input-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+          }
+  
+          .logo {
+            width: 150px;
+            margin-bottom: 20px;
+          }
+  
+          .form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+          }
+  
+          .input-field {
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            width: 250px;
+          }
+  
+          .submit-button {
+            padding: 10px 20px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+          }
+  
+          .submit-button:hover {
+            background-color: #218838;
+          }
+        `}
+      </style>
     </div>
-  );
+  );  
 }  
 export default App;

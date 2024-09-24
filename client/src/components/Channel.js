@@ -13,6 +13,12 @@ import {
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
+const truncateTitle = (title) => {
+  const maxWords = 4;
+  const words = title.split(' ');
+  return words.length > maxWords ? words.slice(0, maxWords).join(' ') + '...' : title;
+};
+
 const Channel = ({ channelId }) => {
   const [channelData, setChannelData] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -40,7 +46,7 @@ const Channel = ({ channelId }) => {
   const videos = channelData.videos || [];
 
   const data = {
-    labels: videos.map(video => video.title),
+    labels: videos.map(video => truncateTitle(video.title)), // Truncate titles
     datasets: [
       {
         label: 'Views Count',
@@ -50,92 +56,177 @@ const Channel = ({ channelId }) => {
     ],
   };
 
+  const options = {
+    responsive: true,
+    maintainAspectRatio: false,
+    scales: {
+      x: {
+        ticks: {
+          maxRotation: 0, // Keep x-axis labels horizontal
+          minRotation: 0,
+        },
+      },
+    },
+    plugins: {
+      legend: {
+        display: false, // Hide legend for simplicity
+      },
+    },
+    layout: {
+      padding: {
+        left: 0,
+        right: 0,
+        top: 10,
+        bottom: 0,
+      },
+    },
+  };
+
   return (
-    <div>
-      <h1>{channelData.title}</h1>
-      <p>{channelData.description}</p>
-      <div>
-        <h3>Channel Statistics:</h3>
-        <p>Subscribers: {statistics.subscriberCount || 'N/A'}</p>
-        <p>Total Views: {statistics.viewCount || 'N/A'}</p>
-        <p>Video Count: {statistics.videoCount || 'N/A'}</p>
+    <div className="container">
+      <h1 className="channel-title">{channelData.title}</h1>
+      <p className="channel-description">{channelData.description}</p>
+
+      <div className="statistics-container">
+        <h3 className="stats-heading">Channel Statistics:</h3>
+        <div className="stats-grid">
+          <p className="stat-item">Subscribers: <span>{statistics.subscriberCount || 'N/A'}</span></p>
+          <p className="stat-item">Total Views: <span>{statistics.viewCount || 'N/A'}</span></p>
+          <p className="stat-item">Video Count: <span>{statistics.videoCount || 'N/A'}</span></p>
+        </div>
       </div>
-      <h2>Videos:</h2>
-      <Bar data={data} />
-      <ul>
+
+      <h2 className="video-heading">Videos:</h2>
+      <div className="bar-chart">
+        <Bar data={data} options={options} />
+      </div>
+
+      <ul className="video-list">
         {videos.map(video => (
-          <li key={video.id}>
-            <h3>{video.title}</h3>
-            <p>{video.description}</p>
-            <p>Published on: {video.publishTime}</p>
-            <img src={video.thumbnail} alt={video.title} />
+          <li className="video-item" key={video.id}>
+            <h3 className="video-title">{video.title}</h3>
+            <p className="video-description">{video.description}</p>
+            <p className="publish-date">Published on: {new Date(video.publishTime).toLocaleDateString()}</p>
+            <img src={video.thumbnail} alt={video.title} className="video-thumbnail" />
           </li>
         ))}
       </ul>
+
       <style>
         {`
-.container {
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 20px;
-  font-family: Arial, sans-serif;
-  background-color: #f9f9f9;
-  border-radius: 8px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-}
+          .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            font-family: 'Roboto', sans-serif;
+            background-color: #f4f7fc;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+          }
 
-h1 {
-  font-size: 2rem;
-  color: #333;
-  margin-bottom: 10px;
-}
+          .channel-title {
+            font-size: 2.5rem;
+            color: #2c3e50;
+            font-weight: 700;
+            margin-bottom: 15px;
+            text-align: center;
+          }
 
-p {
-  font-size: 1rem;
-  color: #555;
-  line-height: 1.6;
-}
+          .channel-description {
+            font-size: 1.2rem;
+            color: #34495e;
+            margin-bottom: 20px;
+            text-align: center;
+            line-height: 1.8;
+          }
 
-h3 {
-  font-size: 1.5rem;
-  color: #444;
-  margin: 20px 0 10px;
-}
+          .statistics-container {
+            margin-bottom: 30px;
+            text-align: center;
+          }
 
-h2 {
-  font-size: 1.75rem;
-  color: #444;
-  margin-top: 30px;
-}
+          .stats-heading {
+            font-size: 1.75rem;
+            color: #16a085;
+            font-weight: 600;
+            margin-bottom: 10px;
+          }
 
-ul {
-  list-style-type: none;
-  padding: 0;
-}
+          .stats-grid {
+            display: flex;
+            justify-content: space-around;
+            padding: 20px 0;
+          }
 
-li {
-  margin: 15px 0;
-  padding: 15px;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  background-color: #fff;
-  transition: transform 0.2s, box-shadow 0.2s;
-}
+          .stat-item {
+            font-size: 1.25rem;
+            color: #2d3e50;
+          }
 
-li:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-}
+          .stat-item span {
+            font-weight: bold;
+            color: #2980b9;
+          }
 
-img {
-  max-width: 100%;
-  border-radius: 5px;
-  margin-top: 10px;
-}
+          .video-heading {
+            font-size: 2rem;
+            color: #e74c3c;
+            margin-bottom: 25px;
+            text-align: center;
+          }
 
-.bar-chart {
-  margin: 30px 0;
-}
+          .bar-chart {
+            width: 100%;
+            margin: 0 auto;
+            padding: 0;
+            height: 400px;
+          }
+
+          .video-list {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+          }
+
+          .video-item {
+            margin: 20px 0;
+            padding: 20px;
+            border: 1px solid #ecf0f1;
+            border-radius: 10px;
+            background-color: #fff;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+          }
+
+          .video-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+          }
+
+          .video-title {
+            font-size: 1.5rem;
+            color: #3498db;
+            margin-bottom: 10px;
+          }
+
+          .video-description {
+            font-size: 1.1rem;
+            color: #7f8c8d;
+            line-height: 1.6;
+            margin-bottom: 10px;
+          }
+
+          .publish-date {
+            font-size: 0.9rem;
+            color: #95a5a6;
+          }
+
+          .video-thumbnail {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            margin-top: 15px;
+          }
         `}
       </style>
     </div>
