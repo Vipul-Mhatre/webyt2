@@ -126,8 +126,8 @@ const Channel = ({ channelId }) => {
 
           .channel-title {
             font-size: 2.5rem;
-            color: #2c3e50;
-            font-weight: 700;
+            color: red;
+            font-weight: 780;
             margin-bottom: 15px;
             text-align: center;
           }
@@ -180,6 +180,7 @@ const Channel = ({ channelId }) => {
             margin: 0 auto;
             padding: 0;
             height: 400px;
+            color: green;
           }
 
           .video-list {
