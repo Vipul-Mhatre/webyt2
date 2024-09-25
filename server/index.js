@@ -1,12 +1,12 @@
+require('dotenv').config();
 const express = require('express');
 const axios = require('axios');
 const cors = require('cors');
-require('dotenv').config();
 
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-const YOUTUBE_API_KEY = process.env.YOUTUBE_API_KEY;
+const YOUTUBE_API_KEY = "AIzaSyBXUoHoUtOCL6e1bvT4FX3twq20OfCkijA";
 
 app.use(cors());
 
